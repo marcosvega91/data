@@ -3,6 +3,7 @@ import {
   InternalEntityProperties,
   ModelDictionary,
   PrimaryKeyType,
+  Relation,
   Value,
 } from '../glossary'
 import { defineRelationalProperties } from './defineRelationalProperties'
@@ -17,7 +18,7 @@ export function createModel<
   modelName: ModelName,
   primaryKey: PrimaryKeyType,
   properties: Value<Dictionary[ModelName], Dictionary>,
-  relations: Record<string, any>,
+  relations: Record<string, Relation<any>>,
   db: Database<Dictionary>,
 ) {
   log(

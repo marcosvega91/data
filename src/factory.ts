@@ -17,6 +17,7 @@ import { findPrimaryKey } from './utils/findPrimaryKey'
 import { generateRestHandlers } from './model/generateRestHandlers'
 import { generateGraphQLHandlers } from './model/generateGraphQLHandlers'
 import { sync } from './extensions/sync'
+import { persist } from './extensions/persist'
 
 /**
  * Create a database with the given models.
@@ -47,6 +48,7 @@ function createModelApi<
   const primaryKey = findPrimaryKey(declaration)
 
   sync(db)
+  persist(db)
 
   if (typeof primaryKey === 'undefined') {
     throw new OperationError(
