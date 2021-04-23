@@ -5,7 +5,7 @@ import { ModelDefinition, PrimaryKeyType } from '../glossary'
  */
 export function findPrimaryKey(
   definition: ModelDefinition,
-): PrimaryKeyType | undefined {
+): string | undefined {
   for (const propertyName in definition) {
     const values = definition[propertyName]
 

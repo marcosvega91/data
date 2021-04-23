@@ -4,7 +4,6 @@ import {
   InternalEntity,
   InternalEntityProperty,
   ModelDictionary,
-  PrimaryKeyType,
 } from '../glossary'
 
 type Models<Dictionary extends ModelDictionary> = Record<
@@ -63,7 +62,7 @@ export class Database<Dictionary extends ModelDictionary> {
   create<ModelName extends string>(
     modelName: ModelName,
     entity: InternalEntity<Dictionary, any>,
-    customPrimaryKey?: PrimaryKeyType,
+    customPrimaryKey?: string,
   ) {
     const primaryKey =
       customPrimaryKey ||
@@ -92,10 +91,7 @@ export class Database<Dictionary extends ModelDictionary> {
     this.events.emit('update', this.id, modelName, prevEntity, nextEntity)
   }
 
-  has<ModelName extends string>(
-    modelName: ModelName,
-    primaryKey: PrimaryKeyType,
-  ) {
+  has<ModelName extends string>(modelName: ModelName, primaryKey: string) {
     return this.getModel(modelName).has(primaryKey)
   }
 
@@ -103,10 +99,7 @@ export class Database<Dictionary extends ModelDictionary> {
     return this.getModel(modelName).size
   }
 
-  delete<ModelName extends string>(
-    modelName: ModelName,
-    primaryKey: PrimaryKeyType,
-  ) {
+  delete<ModelName extends string>(modelName: ModelName, primaryKey: string) {
     this.getModel(modelName).delete(primaryKey)
     this.events.emit('delete', this.id, modelName, primaryKey)
   }

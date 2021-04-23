@@ -13,6 +13,10 @@ const db = factory({
     id: primaryKey(String),
     title: String,
   },
+  address: {
+    id: primaryKey(Number),
+    street: String,
+  },
 })
 
 // @ts-expect-error Unknown model name.
@@ -22,6 +26,11 @@ db.user.create({
   id: 'abc-123',
   // @ts-expect-error Unknown model property.
   unknownProp: true,
+})
+
+db.address.create({
+  // @ts-expect-error Id must be of type number.
+  id: '1234',
 })
 
 db.user.create({

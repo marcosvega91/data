@@ -5,7 +5,7 @@ import {
   WeakQuerySelector,
 } from './query/queryTypes'
 
-export type PrimaryKeyType = string
+export type PrimaryKeyType = string | number
 export type BaseTypes = string | number | boolean | Date
 export type KeyType = string | number | symbol
 
@@ -15,9 +15,9 @@ export enum InternalEntityProperty {
   primaryKey = '__primaryKey',
 }
 
-export interface PrimaryKeyDeclaration {
+export interface PrimaryKeyDeclaration<KeyType extends PrimaryKeyType> {
   isPrimaryKey: boolean
-  getValue(): PrimaryKeyType
+  getValue(): KeyType
 }
 
 export enum RelationKind {
@@ -42,7 +42,7 @@ export interface Relation {
   kind: RelationKind
   modelName: string
   unique: boolean
-  primaryKey: PrimaryKeyType
+  primaryKey: string
 }
 
 /**
@@ -71,7 +71,7 @@ export type ManyOf<ModelName extends KeyType> = RelationDefinition<
 
 export type ModelDefinition = Record<
   string,
-  (() => BaseTypes) | OneOf<any> | ManyOf<any> | PrimaryKeyDeclaration
+  (() => BaseTypes) | OneOf<any> | ManyOf<any> | PrimaryKeyDeclaration<any>
 >
 
 export type FactoryAPI<Dictionary extends Record<string, any>> = {
@@ -80,7 +80,7 @@ export type FactoryAPI<Dictionary extends Record<string, any>> = {
 
 export interface InternalEntityProperties<ModelName extends KeyType> {
   readonly [InternalEntityProperty.type]: ModelName
-  readonly [InternalEntityProperty.primaryKey]: PrimaryKeyType
+  readonly [InternalEntityProperty.primaryKey]: string
 }
 
 export type Entity<
@@ -99,7 +99,7 @@ export type Limit<T extends Record<string, any>> = {
   [RK in keyof T]: {
     [SK in keyof T[RK]]: T[RK][SK] extends
       | (() => BaseTypes)
-      | PrimaryKeyDeclaration
+      | PrimaryKeyDeclaration<any>
       | OneOf<keyof T>
       | ManyOf<keyof T>
       ? T[RK][SK]
@@ -184,7 +184,7 @@ export type UpdateManyValue<
 > =
   | Value<T, Parent>
   | {
-      [K in keyof T]: T[K] extends PrimaryKeyDeclaration
+      [K in keyof T]: T[K] extends PrimaryKeyDeclaration<any>
         ? (
             prevValue: ReturnType<T[K]['getValue']>,
             entity: Value<T, Parent>,
@@ -203,7 +203,7 @@ export type Value<
     ? Entity<Parent, T[K]['modelName']>
     : T[K] extends ManyOf<any>
     ? Entity<Parent, T[K]['modelName']>[]
-    : T[K] extends PrimaryKeyDeclaration
+    : T[K] extends PrimaryKeyDeclaration<any>
     ? ReturnType<T[K]['getValue']>
     : ReturnType<T[K]>
 }

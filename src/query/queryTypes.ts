@@ -28,7 +28,7 @@ interface BulkQueryOffsetOptions extends BulkQueryBaseOptions {
 
 interface BulkQueryCursorOptions extends BulkQueryBaseOptions {
   skip?: never
-  cursor: PrimaryKeyType | null
+  cursor: string | null
 }
 
 export type BulkQueryOptions = BulkQueryOffsetOptions | BulkQueryCursorOptions
