@@ -3,7 +3,6 @@ import {
   Relation,
   RelationKind,
   ModelDefinition,
-  PrimaryKeyType,
   ModelDictionary,
 } from '../glossary'
 import { invariant } from '../utils/invariant'
@@ -12,7 +11,7 @@ import { findPrimaryKey } from '../utils/findPrimaryKey'
 const log = debug('parseModelDefinition')
 
 export interface ParsedModelDefinition {
-  primaryKey: PrimaryKeyType
+  primaryKey: string
   properties: string[]
   relations: Record<string, Relation>
 }

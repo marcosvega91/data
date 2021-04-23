@@ -8,8 +8,8 @@ interface WeakQuerySelectorWhere<KeyType extends PrimaryKeyType> {
   [key: string]: Partial<GetQueryFor<KeyType>>
 }
 
-type RequestParams<Key extends PrimaryKeyType> = {
-  [K in PrimaryKeyType]: PrimaryKeyType
+type RequestParams = {
+  [K: string]: string
 }
 
 export function createUrlBuilder(baseUrl?: string) {
@@ -58,7 +58,7 @@ export function generateRestHandlers<
   ModelName extends string
 >(
   modelName: ModelName,
-  primaryKey: PrimaryKeyType,
+  primaryKey: string,
   model: ModelAPI<Dictionary, ModelName>,
   baseUrl: string = '',
 ) {
@@ -92,7 +92,7 @@ export function generateRestHandlers<
     ),
     rest.get(
       buildUrl(`${modelPath}/:${primaryKey}`),
-      withErrors<Entity<Dictionary, ModelName>, RequestParams<PrimaryKeyType>>(
+      withErrors<Entity<Dictionary, ModelName>, RequestParams>(
         (req, res, ctx) => {
           const id = req.params[primaryKey]
           const where: WeakQuerySelectorWhere<typeof primaryKey> = {
@@ -118,7 +118,7 @@ export function generateRestHandlers<
     ),
     rest.put(
       buildUrl(`${modelPath}/:${primaryKey}`),
-      withErrors<Entity<Dictionary, ModelName>, RequestParams<PrimaryKeyType>>(
+      withErrors<Entity<Dictionary, ModelName>, RequestParams>(
         (req, res, ctx) => {
           const id = req.params[primaryKey]
           const where: WeakQuerySelectorWhere<typeof primaryKey> = {
@@ -138,7 +138,7 @@ export function generateRestHandlers<
     ),
     rest.delete(
       buildUrl(`${modelPath}/:${primaryKey}`),
-      withErrors<Entity<Dictionary, ModelName>, RequestParams<PrimaryKeyType>>(
+      withErrors<Entity<Dictionary, ModelName>, RequestParams>(
         (req, res, ctx) => {
           const id = req.params[primaryKey]
           const where: WeakQuerySelectorWhere<typeof primaryKey> = {
